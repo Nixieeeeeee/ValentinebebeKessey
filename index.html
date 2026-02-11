@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Valentine Puzzle</title>
+
+<!-- Google Font: Moonlight -->
+<link href="https://fonts.googleapis.com/css2?family=Moonlight&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Moonlight', cursive;
+    text-align: center;
+    padding: 20px;
+    overflow-x: hidden;
+    background-image: url('https://i.imgur.com/cVngywL.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: #ffebee;
+    position: relative;
+}
+
+/* Floating decorative images */
+.decorative {
+    position: absolute;
+    width: 80px;
+    opacity: 0.8;
+    z-index: 1;
+    animation: floatAnim 10s ease-in-out infinite alternate;
+}
+@keyframes floatAnim {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(20px) rotate(20deg); }
+}
+
+/* Red shades theme for buttons */
+button {
+    padding: 12px 25px;
+    margin: 10px;
+    border-radius: 20px;
+    border: none;
+    background: linear-gradient(45deg, #ff1744, #d50000);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+button:hover {
+    opacity: 0.85;
+}
+
+/* Puzzle Container */
+.puzzle-container {
+    margin-top: 20px;
+    display: none;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba(255, 235, 238, 0.8);
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Images grid */
+.images {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.images img {
+    width: 100%;
+    border-radius: 15px;
+}
+
+/* Scrambled letters and labels visible and bigger */
+#scrambledWord,
+.letters p,            /* "Unscramble the word:" text */
+#valentineScreen h2 {  /* "Will You Be My Valentine?" text */
+    font-size: 28px;
+    font-weight: bold;
+    color: #b71c1c;  /* Dark red */
+    letter-spacing: 3px;
+    margin: 10px 0;
+}
+
+/* Input styling */
+input {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: 2px solid #d50000;
+    text-align: center;
+}
+
+/* Message box */
+.message-box {
+    display: none;
+    background: rgba(255, 235, 238, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 20px;
+    color: #d50000;
+}
+
+/* Confetti */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: #ff1744;
+    top: 0;
+    left: 50%;
+    opacity: 0.8;
+    pointer-events: none;
+    z-index: 9999;
+    animation: fall 3s linear infinite;
+}
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(360deg); }
+}
+
+/* Envelope start button */
+#startBtn {
+    cursor: pointer;
+    margin-top: 100px;
+    transition: transform 0.3s;
+}
+#startBtn:hover {
+    transform: scale(1.1);
+}
+
+/* Valentine screen */
+#valentineScreen {
+    display: none;
+    margin-top: 50px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    background: rgba(255, 235, 238, 0.9);
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+#valentineScreen img {
+    width: 200px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+#valentineScreen button {
+    display: inline-block;
+    margin: 10px;
+}
+
+/* Final Thank You */
+#thankYouScreen {
+    display: none;
+    max-width: 600px;
+    margin: 50px auto;
+    background: rgba(255, 235, 238, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
+}
+#thankYouScreen img {
+    width: 250px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+#thankYouScreen p {
+    font-size: 22px;
+    font-weight: bold;
+    color: #d50000;
+}
+
+/* Final long message */
+#finalMessage {
+    display: none;
+    text-align: left;
+    margin-top:30px;
+    color:#d50000;
+    max-width:600px;
+    margin-left:auto;
+    margin-right:auto;
+    background: rgba(255,235,238,0.9);
+    padding:20px;
+    border-radius:15px;
+    position: relative;
+    z-index: 2;
+}
+</style>
+</head>
+<body>
+
+<h1>Valentine Puzzle</h1>
+
+<!-- Decorative images -->
+<img class="decorative" src="https://i.imgur.com/8GdUWqj.png" style="top:10px; left:20px;">
+<img class="decorative" src="https://i.imgur.com/Gpfb52k.png" style="top:50px; right:30px;">
+<img class="decorative" src="https://i.imgur.com/sk9KqDW.png" style="bottom:50px; left:50px;">
+<img class="decorative" src="https://i.imgur.com/cBSAR4F.png" style="bottom:80px; right:70px;">
+<img class="decorative" src="https://i.imgur.com/4Dz7jKf.png" style="top:150px; left:100px;">
+<img class="decorative" src="https://i.imgur.com/zrWKhlz.png" style="bottom:150px; right:120px;">
+
+<!-- Envelope start button -->
+<img id="startBtn" src="https://i.imgur.com/wEmrUGv.png" width="150" alt="Envelope Start">
+
+<div class="puzzle-container" id="puzzleContainer">
+    <h2 id="puzzleTitle">Puzzle 1 of 3</h2>
+    <div class="images" id="imageGrid"></div>
+    <div class="letters">
+        <p>Unscramble the word:</p>
+        <p id="scrambledWord"></p>
+        <input type="text" id="answerInput" placeholder="Type your answer">
+    </div>
+    <button id="checkBtn" onclick="checkAnswer()">Check</button>
+    <div class="message-box" id="messageBox">
+        <p id="successMessage"></p>
+        <button id="continueBtn" onclick="nextPuzzle()">Continue</button>
+    </div>
+</div>
+
+<!-- Confetti container -->
+<div id="confettiContainer"></div>
+
+<!-- Final Long Message -->
+<div id="finalMessage">
+    <p id="longMessage"></p>
+    <button onclick="showValentineScreen()">Next</button>
+</div>
+
+<!-- Valentine Yes/No screen -->
+<div id="valentineScreen">
+    <img src="https://i.imgur.com/OO4HCLr.jpeg" alt="Valentine Header">
+    <h2>Will You Be My Valentine?</h2>
+    <button id="yesBtn">Yes</button>
+    <button id="noBtn">No</button>
+</div>
+
+<!-- Thank You screen -->
+<div id="thankYouScreen">
+    <img src="https://i.imgur.com/rBjhFVf.jpeg" alt="Thank You">
+    <p>THANK YOU SO MUCH BABYYYYY</p>
+</div>
+
+<script>
+// Puzzle data
+const puzzles = [
+    {
+        answer: "BEAUTIFUL",
+        message: "Ikaw yan palagi, Baby.",
+        images: [
+            "https://i.imgur.com/RY0BQAZ.jpeg",
+            "https://i.imgur.com/xKGUT7q.jpeg",
+            "https://i.imgur.com/3wwEWsB.jpeg",
+            "https://i.imgur.com/03GE2iC.jpeg"
+        ]
+    },
+    {
+        answer: "AMAZING",
+        message: "Continue being amazing, Baby.",
+        images: [
+            "https://i.imgur.com/dKQTmQD.jpeg",
+            "https://i.imgur.com/z6TQlB3.jpeg",
+            "https://i.imgur.com/hvvVks0.jpeg",
+            "https://i.imgur.com/2plM90a.jpeg"
+        ]
+    },
+    {
+        answer: "FOREVER",
+        message: "Let us spend our lives together forevermore.",
+        images: [
+            "https://i.imgur.com/wF0mMXv.jpeg",
+            "https://i.imgur.com/LBTjEmm.jpeg",
+            "https://i.imgur.com/yqW65Sd.jpeg",
+            "https://i.imgur.com/FQl5Fii.jpeg"
+        ]
+    }
+];
+
+let currentPuzzle = 0;
+
+// Scramble function
+function scramble(word) {
+    return word.split('').sort(() => 0.5 - Math.random()).join('');
+}
+
+// Load puzzle
+function loadPuzzle() {
+    document.getElementById("puzzleTitle").innerText = "Puzzle " + (currentPuzzle + 1) + " of 3";
+    document.getElementById("scrambledWord").innerText = scramble(puzzles[currentPuzzle].answer);
+    document.getElementById("answerInput").value = "";
+    document.getElementById("messageBox").style.display = "none";
+
+    const imageGrid = document.getElementById("imageGrid");
+    imageGrid.innerHTML = "";
+    puzzles[currentPuzzle].images.forEach(src => {
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "Puzzle image";
+        img.style.width = "100%";
+        img.style.borderRadius = "15px";
+        imageGrid.appendChild(img);
+    });
+}
+
+// Confetti
+function createConfetti() {
+    for (let i=0; i<30; i++) {
+        const confetti = document.createElement("div");
+        confetti.className = "confetti";
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = ["#ff1744","#ff1493","#ffb6c1","#ffc0cb"][Math.floor(Math.random()*4)];
+        confetti.style.animationDuration = 2 + Math.random()*2 + "s";
+        document.body.appendChild(confetti);
+        setTimeout(()=> confetti.remove(), 3000);
+    }
+}
+
+// Check answer
+function checkAnswer() {
+    let userAnswer = document.getElementById("answerInput").value.toUpperCase();
+    if (userAnswer === puzzles[currentPuzzle].answer) {
+        document.getElementById("successMessage").innerText = puzzles[currentPuzzle].message;
+        document.getElementById("messageBox").style.display = "block";
+        createConfetti();
+    } else {
+        alert("Try again.");
+    }
+}
+
+// Next puzzle
+function nextPuzzle() {
+    currentPuzzle++;
+    if (currentPuzzle < puzzles.length) {
+        loadPuzzle();
+    } else {
+        showFinalMessage();
+    }
+}
+
+// Envelope start
+document.getElementById("startBtn").addEventListener("click", function() {
+    this.style.display = "none";
+    document.getElementById("puzzleContainer").style.display = "block";
+    loadPuzzle();
+});
+
+// Long message
+const longMessageText = `HIIII BABY KESSEYYYY, this has been such a long time coming do and I do not know how to start this message so I'm just gonna blurt out everything i feel.
+
+Baby, this past few weeks and days, it might have been hard for us but i wanna reassure you na sobrang mahal na mahal kita and I would do anything to get rid of the pain you're feeling, this might get a bit repetitive para sayo pero I want you to know na always mo ako kakampi, always ako nandiyan, at always kitang mamahalin ng sobra-sobra. Baby, you are one of the most important aspect of my life, I'll cherish you till the day i die and even more abt that, you know, daghan nami conversations ni God about rapod nimo, how i wish you knew how i talked to God about you, pero i feel like He knows hehe.
+
+Pero with all that aside, with valentines coming around the corner, my big question is:`;
+
+function showFinalMessage() {
+    document.getElementById("puzzleContainer").style.display = "none";
+    const finalMsg = document.getElementById("finalMessage");
+    document.getElementById("longMessage").innerHTML = longMessageText.replace(/\n/g, "<br><br>");
+    finalMsg.style.display = "block";
+}
+
+// Show Valentine screen
+function showValentineScreen() {
+    document.getElementById("finalMessage").style.display = "none";
+    document.getElementById("valentineScreen").style.display = "block";
+}
+
+// Yes button
+document.getElementById("yesBtn").addEventListener("click", function() {
+    document.getElementById("valentineScreen").style.display = "none";
+    document.getElementById("thankYouScreen").style.display = "block";
+});
+
+// Teleporting No button fixed
+const noBtn = document.getElementById("noBtn");
+noBtn.style.position = "absolute";
+noBtn.addEventListener("mouseenter", function() {
+    this.style.top = Math.random() * (window.innerHeight - this.offsetHeight) + "px";
+    this.style.left = Math.random() * (window.innerWidth - this.offsetWidth) + "px";
+});
+</script>
+</body>
+</html>
